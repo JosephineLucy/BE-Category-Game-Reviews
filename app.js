@@ -7,6 +7,14 @@ app.use(express.json())
 app.get('/api/categories', getCategories)
 // app.post
 
+
+
+
+
+
+
+
+
 app.use('*', (req, res)=>{
     res.status(404).send('path does not exist, sorry!')
 })
