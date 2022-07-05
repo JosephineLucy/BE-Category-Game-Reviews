@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const { getCategories, getReviews, patchReviews } = require('./Controllers/categoriesControllers')
+const { getCategories, getReviews, patchReviews, getUsers } = require('./Controllers/categoriesControllers')
 
 app.use(express.json())
 
@@ -8,6 +8,7 @@ app.use(express.json())
 app.get('/api/categories', getCategories)
 app.get('/api/reviews/:review_id', getReviews);
 app.patch('/api/reviews/:review_id', patchReviews);
+app.get('/api/users', getUsers)
 
 app.use('*', (req, res)=>{
     res.status(404).send({msg: 'path does not exist, sorry!'})
