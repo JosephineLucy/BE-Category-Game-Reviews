@@ -35,7 +35,7 @@ exports.fetchReviews = (review_id)=>{
 exports.updateReview = (review_id, inc_votes)=>{
 
     const params = [review_id, inc_votes];
-
+    
     return db.query(
         `UPDATE reviews 
         SET votes = votes + $2
