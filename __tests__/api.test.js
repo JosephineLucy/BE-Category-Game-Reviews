@@ -14,6 +14,57 @@ beforeEach(() => seed({ categoryData, commentData, reviewData, userData }));
 
 afterAll(() => db.end());
 
+describe("Error Handlers", () => {
+  test("GET 404 status with custom error message, when entered an incorrect path", () => {
+    return request(app)
+      .get("/api/category")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("path does not exist, sorry!");
+      });
+  });
+  test("GET 404 status with custom error message, when entered an id that does not currently exist on database", () => {
+    return request(app)
+      .get("/api/reviews/500")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("no review found with the input id, sorry!");
+      });
+  });
+  test('GET 400 status, responds with custom error message when passed a bad request', () => {
+    return request(app)
+      .get('/api/reviews/idfive')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad Request');
+      });
+    });
+    test('PATCH - status 404 id not found - responds with custom error message', () => {
+        return request(app)
+          .patch('/api/review/1')
+          .send({ inc_votes: 1 })
+          .expect(404).then(({ body: { msg } }) => {
+            expect(msg).toBe("path does not exist, sorry!");
+          })
+      });
+      test('PATCH - status 404 path not found - responds with custom error message', () => {
+        return request(app)
+          .patch('/api/reviews/1000')
+          .send({ inc_votes: 1 })
+          .expect(404).then(({ body: { msg } }) => {
+            expect(msg).toBe("no review found with the input id, sorry!");
+          })
+      });
+      test('PATCH - status 400 invalid votes object - responds with custom error message', () => {
+        return request(app)
+          .patch('/api/reviews/1000')
+          .send({ inc_votes: 'atrocious' })
+          .expect(400).then(({ body: { msg } }) => {
+            expect(msg).toBe("Invalid vote increase, please enter a number to increase votes by");
+          })
+      });
+});
+
 describe("GET /api/categories", () => {
   test("200 response", () => {
     return request(app).get("/api/categories").expect(200);
@@ -81,29 +132,32 @@ describe("GET /api/reviews/:review_id", () => {
   });
 });
 
-describe.only("Error Handlers", () => {
-  test("404 status with custom error message, when entered an incorrect path", () => {
-    return request(app)
-      .get("/api/category")
-      .expect(404)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("path does not exist, sorry!");
-      });
-  });
-  test("404 status with custom error message, when entered an id that does not currently exist on database", () => {
-    return request(app)
-      .get("/api/reviews/500")
-      .expect(404)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("no review found with the input id, sorry!");
-      });
-  });
-  test('400 status, responds with custom error message when passed a bad request', () => {
-    return request(app)
-      .get('/api/reviews/idfive')
-      .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe('Bad Request');
-      });
+describe('PATCH /api/reviews/:review_id', ()=>{
+    test('202 status', ()=>{
+        return request(app)
+      .patch("/api/reviews/1").send({ inc_votes: 1 }).expect(202)
     });
-});
+    test("202: returns an updated review object:", () => {
+        return request(app)
+          .patch("/api/reviews/1")
+          .send({ inc_votes: 1 })
+          .expect(202)
+          .then(({ body: { updated_review } }) => {
+            expect(updated_review).toEqual({
+                review_id: 1,
+                title: 'Agricola',
+                category: 'euro game',
+                designer: 'Uwe Rosenberg',
+                owner: 'mallionaire',
+                review_body: 'Farmyard fun!',
+                review_img_url: 'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
+                created_at: '2021-01-18T10:00:20.514Z',
+                votes: 2
+
+            });
+          });
+      });
+
+})
+
+
