@@ -1,9 +1,8 @@
 const db = require('../db/connection');
 
-
-exports.fetchCategories = ()=>{
+exports.fetchUsers = ()=>{
     return db.query(`
-         SELECT * FROM categories 
+         SELECT * FROM users 
     `).then((result)=>{
         return result.rows
     })

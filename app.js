@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
-const { getCategories, getReviews, patchReviews, getUsers } = require('./Controllers/categoriesControllers')
+const { getCategories } = require('./Controllers/categoriesControllers')
+const { getReviews, patchReviews } = require('./Controllers/reviewsControllers')
+const { getUsers } = require('./Controllers/usersControllers')
 
 app.use(express.json())
 
@@ -22,6 +24,7 @@ app.use((err, req, res, next)=>{
 })
 
 app.use((err, req, res, next)=>{
+    console.log(err, '<<<error')
     if (err.code === '22P02') {
         res.status(400).send({ msg: 'Bad Request' })
     } else res.status(500).send({error_message : 'Error something went wrong, sorry!!' })
