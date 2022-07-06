@@ -139,6 +139,30 @@ describe("GET /api/reviews/:review_id", () => {
         );
     });
 });
+test("200: nested review object contains the key of comment_count:", () => {
+  return request(app)
+  .get("/api/reviews/3")
+  .expect(200)
+  .then(({ body: { review } }) => {
+      expect(review).toEqual(
+          expect.objectContaining({
+            comment_count: expect.any(Number)
+          })
+  );
+});
+});
+test("200: nested review object contains the correct comment_count value:", () => {
+  return request(app)
+  .get("/api/reviews/3")
+  .expect(200)
+  .then(({ body: { review } }) => {
+      expect(review).toEqual(
+          expect.objectContaining({
+            comment_count: 3
+          })
+  );
+});
+});
 });
 
 describe('PATCH /api/reviews/:review_id', ()=>{
