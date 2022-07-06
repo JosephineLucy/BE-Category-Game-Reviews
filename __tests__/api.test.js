@@ -71,6 +71,14 @@ describe("Error Handlers", () => {
             expect(msg).toBe("path does not exist, sorry!");
           });
       });
+      test("GET 404 status with custom error message, when entered an incorrect path", () => {
+        return request(app)
+          .get("/api/review")
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("path does not exist, sorry!");
+          });
+      });
      });
 
 describe("GET /api/categories", () => {
@@ -226,3 +234,43 @@ describe('GET /api/users', ()=>{
       });
     });
 
+describe('GET /api/reviews', ()=>{
+  test('200 Response', ()=>{
+    return request(app).get("/api/reviews").expect(200);
+  })
+  test("200 response, returns an array of objects", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews.length).toBeGreaterThan(0);
+        reviews.forEach((review) => {
+          expect(typeof review).toBe("object");
+        });
+      });
+  });
+  test("200 response, returns an object containing array of objects which should have the correct properties ", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        reviews.forEach((review) => {
+          expect(review).toEqual(
+            expect.objectContaining({
+              review_id: expect.any(Number),
+              title: expect.any(String),
+              category: expect.any(String),
+              designer: expect.any(String),
+              owner: expect.any(String),
+              review_body: expect.any(String),
+              review_img_url:
+              expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              comment_count: expect.any(Number)
+            })
+          );
+        });
+      });
+  });
+});

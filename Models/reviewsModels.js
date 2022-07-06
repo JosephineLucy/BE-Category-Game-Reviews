@@ -1,6 +1,6 @@
 const db = require('../db/connection');
 
-exports.fetchReviews = (review_id)=>{
+exports.fetchReviewsByID = (review_id)=>{
     return db.query(
         `
         SELECT reviews.*, COUNT(comments.review_id)::INT AS comment_count
@@ -46,3 +46,16 @@ exports.updateReview = (review_id, inc_votes)=>{
             return result.rows[0]
         })
     };
+
+
+exports.fetchReviews = ()=>{
+    return db.query(`
+    SELECT reviews.*, COUNT(comments.review_id)::INT AS comment_count
+    FROM reviews
+    LEFT JOIN comments ON comments.review_id = reviews.review_id
+    GROUP BY reviews.review_id
+    ;`
+).then((result)=>{
+   return result.rows
+})
+};
