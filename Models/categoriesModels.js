@@ -5,7 +5,6 @@ exports.fetchCategories = ()=>{
     return db.query(`
          SELECT * FROM categories 
     `).then((result)=>{
-        console.log(result.rows)
         return result.rows
     })
 };
@@ -32,8 +31,9 @@ exports.fetchReviews = (review_id)=>{
       )
 }
 
-exports.updateReview = (review_id, inc_votes)=>{
 
+exports.updateReview = (review_id, inc_votes)=>{
+    
     const params = [review_id, inc_votes];
     
     return db.query(
@@ -42,13 +42,22 @@ exports.updateReview = (review_id, inc_votes)=>{
         WHERE review_id = $1
         RETURNING *`,
         params
-    ).then((result) =>{
-        if (result.rows.length === 0) {
-            return Promise.reject({
-                status: 404,
-                msg: 'no review found with the input id, sorry!',
-            });
-        }
-        return result.rows[0]
-    })
-};
+        ).then((result) =>{
+            if (result.rows.length === 0) {
+                return Promise.reject({
+                    status: 404,
+                    msg: 'no review found with the input id, sorry!',
+                });
+            }
+            return result.rows[0]
+        })
+    };
+    
+exports.fetchUsers = ()=>{
+        return db.query(`
+             SELECT * FROM users 
+        `).then((result)=>{
+            console.log(result.rows, '<<<< rows in model line 39')
+            return result.rows
+        })
+    };
