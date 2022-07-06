@@ -247,4 +247,15 @@ describe("GET /api/reviews", () => {
         });
       });
   });
+  test("objects are sorted into descending order by date", () => {
+    return request(app)
+      .get("/api/reviews")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews).toBeSortedBy("created_at", {
+          descending: true,
+          coerce: true,
+        });
+      });
+  });
 });
