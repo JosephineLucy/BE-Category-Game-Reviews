@@ -68,14 +68,6 @@ describe("Error Handlers", () => {
         );
       });
   });
-  test("GET commentsByID - 404 status with custom error message, when no comments for entered id", () => {
-    return request(app)
-      .get("/api/reviews/100/comments")
-      .expect(404)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("no review found with the input id, sorry!");
-      });
-  });
   test("GET commentsByID - 400 status with custom error message, when invalid entered id", () => {
     return request(app)
       .get("/api/reviews/numberone/comments")
@@ -84,12 +76,48 @@ describe("Error Handlers", () => {
         expect(msg).toBe("Bad Request");
       });
   });
-  test("POST commentsByID - 400 status with custom error message, when invalid entered id", () => {
+  test("POST commentsByID - 400 status, when invalid entered id", () => {
     return request(app)
       .post("/api/reviews/numberone/comments")
       .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad Request");
+      });
+  });
+  test("POST commentsByID - 400 status, when entered empty body", () => {
+    return request(app)
+      .post("/api/reviews/1/comments")
+      .send({})
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request");
+      });
+  });
+  test("POST commentsByID - 400 status, when entered an invalid body - missing a username", () => {
+    return request(app)
+      .post("/api/reviews/1/comments")
+      .send({ body: "I forgot to include a username!" })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request");
+      });
+  });
+  test("POST commentsByID - 400 status, when entered an invalid body - missing a body", () => {
+    return request(app)
+      .post("/api/reviews/1/comments")
+      .send({ username: "mallionaire" })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request");
+      });
+  });
+  test("POST commentsByID - 400 status, when entered a valid body but username doesn't exist in db", () => {
+    return request(app)
+      .post("/api/reviews/1/comments")
+      .send({ username: "rupi", body: "I am not a user yet" })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("sorry, invalid username!");
       });
   });
 });

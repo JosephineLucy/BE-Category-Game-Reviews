@@ -18,7 +18,13 @@ exports.postCommentsByID = (req, res, next) => {
   const { review_id } = req.params;
   const { username } = req.body;
   const { body } = req.body;
-
+  if (
+    req.body === undefined ||
+    req.body === {} ||
+    Object.keys(req.body).length < 2
+  ) {
+    res.status(400).send({ msg: "Bad Request" });
+  }
   insertReviews(review_id, username, body)
     .then((postedComment) => {
       res.status(201).send({ postedComment });
