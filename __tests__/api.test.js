@@ -68,14 +68,7 @@ describe("Error Handlers", () => {
         );
       });
   });
-  test("GET commentsByID - 400 status with custom error message, when invalid entered id", () => {
-    return request(app)
-      .get("/api/reviews/numberone/comments")
-      .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("Bad Request");
-      });
-  });
+
   test("POST commentsByID - 400 status, when invalid entered id", () => {
     return request(app)
       .post("/api/reviews/numberone/comments")
