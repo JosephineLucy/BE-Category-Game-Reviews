@@ -29,3 +29,18 @@ exports.fetchCommentsByID = (review_id) => {
       return comments.rows;
     });
 };
+
+exports.insertReviews = (review_id, username, body) => {
+  const params = [review_id, username, body];
+
+  return db
+    .query(
+      `INSERT INTO comments (review_id, author, body)
+        VALUES ($1, $2, $3)        
+        RETURNING *;`,
+      params
+    )
+    .then((result) => {
+      return result.rows[0];
+    });
+};

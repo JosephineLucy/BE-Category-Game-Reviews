@@ -84,6 +84,14 @@ describe("Error Handlers", () => {
         expect(msg).toBe("Bad Request");
       });
   });
+  test("POST commentsByID - 400 status with custom error message, when invalid entered id", () => {
+    return request(app)
+      .post("/api/reviews/numberone/comments")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request");
+      });
+  });
 });
 
 describe("GET /api/categories", () => {
@@ -313,12 +321,34 @@ describe("GET /api/reviews/:review_id/comments", () => {
         });
       });
   });
-  test("200: returns a message for client when no comments exist for passed id", () => {
+  test("200: returns an empty when no comments exist for passed id", () => {
     return request(app)
       .get("/api/reviews/1/comments")
       .expect(200)
       .then(({ body }) => {
         expect(body).toEqual({ comments: [] });
+      });
+  });
+});
+
+describe("POST /api/reviews/:review_id/comments", () => {
+  test("201: responds with posted comment", () => {
+    const commentToPost = {
+      username: "mallionaire",
+      body: "Terrific!",
+    };
+    return request(app)
+      .post("/api/reviews/1/comments")
+      .send(commentToPost)
+      .expect(201)
+      .then(({ body: { postedComment } }) => {
+        expect(postedComment).toEqual(
+          expect.objectContaining({
+            review_id: 1,
+            author: "mallionaire",
+            body: "Terrific!",
+          })
+        );
       });
   });
 });

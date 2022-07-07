@@ -7,7 +7,10 @@ const {
   getReviews,
 } = require("./Controllers/reviewsControllers");
 const { getUsers } = require("./Controllers/usersControllers");
-const { getCommentsByID } = require("./Controllers/commentsControllers");
+const {
+  getCommentsByID,
+  postCommentsByID,
+} = require("./Controllers/commentsControllers");
 
 app.use(express.json());
 
@@ -17,6 +20,7 @@ app.patch("/api/reviews/:review_id", patchReviews);
 app.get("/api/users", getUsers);
 app.get("/api/reviews", getReviews);
 app.get("/api/reviews/:review_id/comments", getCommentsByID);
+app.post("/api/reviews/:review_id/comments", postCommentsByID);
 
 app.use("*", (req, res) => {
   res.status(404).send({ msg: "path does not exist, sorry!" });
