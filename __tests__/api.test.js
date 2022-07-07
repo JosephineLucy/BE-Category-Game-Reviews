@@ -68,6 +68,22 @@ describe("Error Handlers", () => {
         );
       });
   });
+  test("GET commentsByID - 404 status with custom error message, when no comments for entered id", () => {
+    return request(app)
+      .get("/api/reviews/100/comments")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("no review found with the input id, sorry!");
+      });
+  });
+  test("GET commentsByID - 400 status with custom error message, when invalid entered id", () => {
+    return request(app)
+      .get("/api/reviews/numberone/comments")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request");
+      });
+  });
 });
 
 describe("GET /api/categories", () => {
@@ -229,6 +245,7 @@ describe("GET /api/reviews", () => {
       .get("/api/reviews")
       .expect(200)
       .then(({ body: { reviews } }) => {
+        expect(reviews.length).toBeGreaterThan(0);
         reviews.forEach((review) => {
           expect(review).toEqual(
             expect.objectContaining({
@@ -256,6 +273,52 @@ describe("GET /api/reviews", () => {
           descending: true,
           coerce: true,
         });
+      });
+  });
+});
+
+describe("GET /api/reviews/:review_id/comments", () => {
+  test("200: returns an array of objects containing correct properties", () => {
+    return request(app)
+      .get("/api/reviews/2/comments")
+      .expect(200)
+      .then(({ body: { comments } }) => {
+        expect(comments.length).toBeGreaterThan(0);
+        comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              review_id: expect.any(Number),
+            })
+          );
+        });
+      });
+  });
+  test("200: returns an array of objects containing matching review id with id , when review id has comments", () => {
+    return request(app)
+      .get("/api/reviews/2/comments")
+      .expect(200)
+      .then(({ body: { comments } }) => {
+        expect(comments.length).toBeGreaterThan(0);
+        comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              review_id: 2,
+            })
+          );
+        });
+      });
+  });
+  test("200: returns a message for client when no comments exist for passed id", () => {
+    return request(app)
+      .get("/api/reviews/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual({ comments: [] });
       });
   });
 });
