@@ -112,6 +112,44 @@ describe("Error Handlers", () => {
         expect(msg).toBe("sorry, invalid username!");
       });
   });
+  test("GET reviews (queries) - 400 status, when entered an invalid sort_by", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=theVeryBestCategory")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe(
+          "sorry, this column does not exist! Please try a different column to sort by."
+        );
+      });
+  });
+  test("GET reviews (queries) - 400 status, when entered an invalid order", () => {
+    return request(app)
+      .get("/api/reviews?order=TOMATOES")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe(
+          "sorry, invalid order specified! Valid orders are ASC and DESC."
+        );
+      });
+  });
+  test("GET reviews (queries) - 400 status, when entered an invalid category", () => {
+    return request(app)
+      .get("/api/reviews?category=wingardiumLeviosa")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe(
+          "sorry, this category does not exist! Please try a different category to filter by."
+        );
+      });
+  });
+  test("GET reviews (queries) - 404 status, when entered a valid category but there are no reviews", () => {
+    return request(app)
+      .get("/api/reviews?category=children's%20games")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("sorry, no reviews found for this category");
+      });
+  });
 });
 
 describe("GET /api/categories", () => {
@@ -369,6 +407,47 @@ describe("POST /api/reviews/:review_id/comments", () => {
             body: "Terrific!",
           })
         );
+      });
+  });
+});
+
+describe("GET /api/reviews (queries)", () => {
+  test("sort_by sorts reviews by colmumn specified in query", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=votes")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews).toBeSortedBy("votes", { descending: true });
+      });
+  });
+  test("sort_by sorts reviews by column specified in query", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=title")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews).toBeSortedBy("title", { descending: true });
+      });
+  });
+  test("order specified in query determines whether order is ascending or descending", () => {
+    return request(app)
+      .get("/api/reviews?order=asc")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        expect(reviews).toBeSortedBy("created_at", { ascending: true });
+      });
+  });
+  test("reviews are filtered by category specified in query", () => {
+    return request(app)
+      .get("/api/reviews?category=social deduction")
+      .expect(200)
+      .then(({ body: { reviews } }) => {
+        reviews.forEach((review) => {
+          expect(review).toEqual(
+            expect.objectContaining({
+              category: "social deduction",
+            })
+          );
+        });
       });
   });
 });
