@@ -70,12 +70,18 @@ describe("Error Handlers", () => {
   });
   test("GET commentsByID - 404 status with custom error message, when no comments for entered id", () => {
     return request(app)
-      .get("/api/reviews/1/comments")
+      .get("/api/reviews/100/comments")
       .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe(
-          "no comments found for the input id, sorry! Try a different review_id"
-        );
+        expect(msg).toBe("no review found with the input id, sorry!");
+      });
+  });
+  test("GET commentsByID - 400 status with custom error message, when invalid entered id", () => {
+    return request(app)
+      .get("/api/reviews/numberone/comments")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request");
       });
   });
 });
@@ -292,7 +298,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
         });
       });
   });
-  test("200: returns an array of objects containing matching review id with id passed", () => {
+  test("200: returns an array of objects containing matching review id with id , when review id has comments", () => {
     return request(app)
       .get("/api/reviews/2/comments")
       .expect(200)
@@ -305,6 +311,14 @@ describe("GET /api/reviews/:review_id/comments", () => {
             })
           );
         });
+      });
+  });
+  test("200: returns a message for client when no comments exist for passed id", () => {
+    return request(app)
+      .get("/api/reviews/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual({ comments: [] });
       });
   });
 });
