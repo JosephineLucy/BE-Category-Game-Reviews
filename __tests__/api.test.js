@@ -68,7 +68,6 @@ describe("Error Handlers", () => {
         );
       });
   });
-
   test("POST commentsByID - 400 status, when invalid entered id", () => {
     return request(app)
       .post("/api/reviews/numberone/comments")

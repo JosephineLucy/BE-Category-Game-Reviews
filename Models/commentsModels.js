@@ -35,9 +35,9 @@ exports.insertReviews = (review_id, username, body) => {
   return db
     .query(
       `
-    SELECT FROM users
-    WHERE users.username = $1
-    ;`,
+        SELECT FROM users
+        WHERE users.username = $1
+        ;`,
       [params[1]]
     )
     .then((result) => {
@@ -52,8 +52,8 @@ exports.insertReviews = (review_id, username, body) => {
       return db
         .query(
           `INSERT INTO comments (review_id, author, body)
-            VALUES ($1, $2, $3)        
-            RETURNING *;`,
+                VALUES ($1, $2, $3)        
+                RETURNING *;`,
           params
         )
         .then((result) => {
