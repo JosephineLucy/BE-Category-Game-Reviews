@@ -150,6 +150,22 @@ describe("Error Handlers", () => {
         expect(msg).toBe("sorry, no reviews found for this category");
       });
   });
+  test("DELETE commentsByID - 400 status, when invalid entered id", () => {
+    return request(app)
+      .delete("/api/comments/numberone")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad Request");
+      });
+  });
+  test("DELETE commentsByID - 404 status, when valid entered id but out of range", () => {
+    return request(app)
+      .delete("/api/comments/600")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("sorry, no comment found for this comment_id!");
+      });
+  });
 });
 
 describe("GET /api/categories", () => {
@@ -448,6 +464,20 @@ describe("GET /api/reviews (queries)", () => {
             })
           );
         });
+      });
+  });
+});
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204 status", () => {
+    return request(app).delete("/api/comments/1").expect(204);
+  });
+  test("204 status: response body is empty", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({});
       });
   });
 });

@@ -10,6 +10,7 @@ const { getUsers } = require("./Controllers/usersControllers");
 const {
   getCommentsByID,
   postCommentsByID,
+  deleteCommentsByID,
 } = require("./Controllers/commentsControllers");
 
 app.use(express.json());
@@ -21,6 +22,7 @@ app.get("/api/users", getUsers);
 app.get("/api/reviews", getReviews);
 app.get("/api/reviews/:review_id/comments", getCommentsByID);
 app.post("/api/reviews/:review_id/comments", postCommentsByID);
+app.delete("/api/comments/:comment_id", deleteCommentsByID);
 
 app.use("*", (req, res) => {
   res.status(404).send({ msg: "path does not exist, sorry!" });
