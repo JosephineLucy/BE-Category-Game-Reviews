@@ -1,6 +1,7 @@
 const {
   fetchCommentsByID,
   insertReviews,
+  removeCommentsByID,
 } = require("../models/commentsModels");
 
 exports.getCommentsByID = (req, res, next) => {
@@ -28,6 +29,17 @@ exports.postCommentsByID = (req, res, next) => {
   insertReviews(review_id, username, body)
     .then((postedComment) => {
       res.status(201).send({ postedComment });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+exports.deleteCommentsByID = (req, res, next) => {
+  const { comment_id } = req.params;
+  removeCommentsByID(comment_id)
+    .then((result) => {
+      res.sendStatus(204);
     })
     .catch((err) => {
       next(err);

@@ -61,3 +61,37 @@ exports.insertReviews = (review_id, username, body) => {
         });
     });
 };
+
+exports.removeCommentsByID = (comment_id) => {
+  const params = [comment_id];
+  return db
+    .query(
+      `
+    SELECT FROM comments
+    WHERE comments.comment_id = $1
+    ;
+      `,
+      params
+    )
+    .then((result) => {
+      if (result.rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: "sorry, no comment found for this comment_id!",
+        });
+      } else return params;
+    })
+    .then((params) => {
+      return db.query(
+        `
+        DELETE FROM comments
+        WHERE comments.comment_id = $1
+        RETURNING *;
+      `,
+        params
+      );
+    })
+    .then((deleted) => {
+      return deleted;
+    });
+};
