@@ -1,5 +1,4 @@
 const db = require("../db/connection");
-// ref object = const ____ = require('../utilities');
 const {
   categoryData,
   commentData,
@@ -478,6 +477,22 @@ describe("DELETE /api/comments/:comment_id", () => {
       .expect(204)
       .then(({ body }) => {
         expect(body).toEqual({});
+      });
+  });
+});
+
+describe("GET /api", () => {
+  test("status 200, responds with json", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        console.log(body, "<<<inside test");
+        expect(body).toEqual(
+          expect.objectContaining({
+            endpoints: expect.any(Object),
+          })
+        );
       });
   });
 });
