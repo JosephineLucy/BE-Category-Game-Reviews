@@ -2,7 +2,7 @@ const {
   fetchReviewsByID,
   updateReview,
   fetchReviews,
-} = require("../models/reviewsModels");
+} = require("../Models/reviewsModels");
 
 exports.getReviewsByID = (req, res, next) => {
   const { review_id } = req.params;

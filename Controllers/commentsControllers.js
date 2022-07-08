@@ -2,7 +2,7 @@ const {
   fetchCommentsByID,
   insertReviews,
   removeCommentsByID,
-} = require("../models/commentsModels");
+} = require("../Models/commentsModels");
 
 exports.getCommentsByID = (req, res, next) => {
   const { review_id } = req.params;
