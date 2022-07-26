@@ -48,10 +48,13 @@ exports.updateReview = (review_id, inc_votes) => {
 
 exports.fetchReviews = (sort_by = "created_at", order = "DESC", category) => {
   const validCategories = [
-    "euro game",
-    "social deduction",
+    "strategy",
+    "hidden-roles",
     "dexterity",
-    "children's games",
+    "push-your-luck",
+    "roll-and-write",
+    "deck-building",
+    "engine-building",
   ];
 
   const validColumns = [
