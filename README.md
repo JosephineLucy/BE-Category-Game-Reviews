@@ -6,7 +6,7 @@ This is the backend to my project NC Games.
 
 I have built an API for the purpose of accessing application data programmatically.
 
-Have a go at this project yourself by followiing the instructions below!
+Have a go at this project yourself by following the instructions below!
 
 ## Connect to the Databases Locally
 
