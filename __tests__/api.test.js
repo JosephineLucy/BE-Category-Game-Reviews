@@ -487,7 +487,6 @@ describe("GET /api", () => {
       .get("/api")
       .expect(200)
       .then(({ body }) => {
-        console.log(body, "<<<inside test");
         expect(body).toEqual(
           expect.objectContaining({
             endpoints: expect.any(Object),

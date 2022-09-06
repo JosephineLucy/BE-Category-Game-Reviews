@@ -18,6 +18,7 @@ exports.getCommentsByID = (req, res, next) => {
 
 exports.postCommentsByID = (req, res, next) => {
   const { review_id } = req.params;
+  console.log(review_id);
   const { username } = req.body;
   const { body } = req.body;
   if (
