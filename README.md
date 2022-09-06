@@ -2,9 +2,9 @@
 
 Welcome!
 
-I have built an API for the purpose of accessing application data programmatically.
+This is the backend to my project NC Games.
 
-This is the backend to my project: NC Games.
+I have built an API for the purpose of accessing application data programmatically.
 
 Have a go at this project yourself by followiing the instructions below!
 
