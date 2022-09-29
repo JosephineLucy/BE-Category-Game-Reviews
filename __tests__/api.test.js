@@ -121,6 +121,7 @@ describe("Error Handlers", () => {
         );
       });
   });
+
   test("GET reviews (queries) - 400 status, when entered an invalid order", () => {
     return request(app)
       .get("/api/reviews?order=TOMATOES")
@@ -131,6 +132,7 @@ describe("Error Handlers", () => {
         );
       });
   });
+
   test("GET reviews (queries) - 400 status, when entered an invalid category", () => {
     return request(app)
       .get("/api/reviews?category=wingardiumLeviosa")
@@ -141,9 +143,9 @@ describe("Error Handlers", () => {
         );
       });
   });
-  test("GET reviews (queries) - 404 status, when entered a valid category but there are no reviews", () => {
+  test.only("GET reviews (queries) - 404 status, when entered a valid category but there are no reviews", () => {
     return request(app)
-      .get("/api/reviews?category=children's%20games")
+      .get("/api/reviews?category=jigsaw")
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("sorry, no reviews found for this category");
@@ -453,13 +455,13 @@ describe("GET /api/reviews (queries)", () => {
   });
   test("reviews are filtered by category specified in query", () => {
     return request(app)
-      .get("/api/reviews?category=social deduction")
+      .get("/api/reviews?category=dexterity")
       .expect(200)
       .then(({ body: { reviews } }) => {
         reviews.forEach((review) => {
           expect(review).toEqual(
             expect.objectContaining({
-              category: "social deduction",
+              category: "dexterity",
             })
           );
         });

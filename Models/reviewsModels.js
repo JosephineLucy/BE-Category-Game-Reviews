@@ -55,6 +55,7 @@ exports.fetchReviews = (sort_by = "created_at", order = "DESC", category) => {
     "roll-and-write",
     "deck-building",
     "engine-building",
+    "jigsaw",
   ];
 
   const validColumns = [
