@@ -1,12 +1,12 @@
-# NC Games
+# Category Game Teviews
 
 Welcome!
 
-This is the backend to my project NC Games.
+This is the backend to my project Category Game Reviews.
 
 I have built an API for the purpose of serving application data.
 
-You can view the frontend repo here: https://github.com/JosephineLucy/NC-Game-Reviews
+You can view the frontend repo here: https://github.com/JosephineLucy/Category-Game-Reviews
 
 Have a go at this project yourself by following the instructions below!
 
