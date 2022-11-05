@@ -1,4 +1,4 @@
-# Category Game Teviews
+# Category Game Reviews
 
 Welcome!
 
