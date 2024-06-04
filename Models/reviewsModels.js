@@ -1,5 +1,4 @@
 const db = require("../db/connection");
-const { sort } = require("../db/data/test-data/users");
 
 exports.fetchReviewsByID = (review_id) => {
   return db
@@ -138,6 +137,3 @@ exports.fetchReviews = (sort_by = "created_at", order = "DESC", category) => {
         return result.rows;
       });
 };
-
-/*
- */
