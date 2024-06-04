@@ -1,13 +1,13 @@
-const db = require("../connection");
-const format = require("pg-format");
+const db = require("../connection"); // connection to database
+const format = require("pg-format"); // allows dynamic sql queries to prevent sql injection
 const {
 	convertTimestampToDate,
 	createRef,
 	formatComments,
-} = require("./utils");
+} = require("./utils");//brings in functions from utils file
 
 const seed = async (data) => {
-	const { categoryData, commentData, reviewData, userData } = data;
+	const { categoryData, commentData, reviewData, userData } = data; //takes from index file in run-seed
 	await db.query(`DROP TABLE IF EXISTS comments;`);
 	await db.query(`DROP TABLE IF EXISTS reviews;`);
 	await db.query(`DROP TABLE IF EXISTS users;`);
